@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import planet from "../assets/icons/Planet.svg";
+import planet from "@/assets/icons/Planet.svg";
 import Image from "next/image";
 import { motion } from "motion/react";
 import { usePathname } from "next/navigation";
