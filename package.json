@@ -9,6 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "firebase": "^12.0.0",
     "motion": "^12.23.12",
     "next": "15.4.5",
     "prettier": "^3.6.2",
