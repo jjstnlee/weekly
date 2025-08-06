@@ -12,6 +12,7 @@ import Divider from "@/components/Divider";
 import { useAuth } from "@/contexts/AuthContext";
 import AuthErrorMessage from "@/components/AuthErrorMessage";
 import { useRouter } from "next/navigation";
+import { FirebaseError } from "firebase/app";
 
 export default function Signup() {
   const [email, setEmail] = useState("");
@@ -31,19 +32,8 @@ export default function Signup() {
     setWeakPasswordError("");
     setConfirmPasswordError("");
 
-    {
-      /* Validate passwords */
-    }
-    const status = await authContextValue?.validate(password);
-    if (!status?.isValid || password !== confirmPassword) {
-      if (!status?.isValid) {
-        setWeakPasswordError(
-          "Weak password. Please choose a stronger password.",
-        );
-      }
-      if (password !== confirmPassword) {
-        setConfirmPasswordError("Passwords do not match");
-      }
+    if (password !== confirmPassword) {
+      setConfirmPasswordError("Passwords do not match");
       return;
     }
 
@@ -55,20 +45,18 @@ export default function Signup() {
         router.push("/verification");
       });
     } catch (error) {
-      if (error instanceof Error) {
-        if (error.message.includes("invalid-email")) {
+      if (error instanceof FirebaseError) {
+        if (error.code === "auth/invalid-email") {
           setInvalidEmailError("Invalid email address");
-        } else if (error.message.includes("weak-password")) {
-          setWeakPasswordError(
-            "Weak password. Please choose a stronger password.",
-          );
-        } else if (error.message.includes("email-already-in-use")) {
+        } else if (error.code === "auth/email-already-in-use") {
           setInvalidEmailError("Email already in use");
-        } else {
-          setInvalidEmailError("Invalid email address");
+        } else if (error.code === "auth/weak-password") {
+          setWeakPasswordError("Password must be at least 6 characters long");
         }
+        return;
       }
     }
+
     setEmail("");
     setPassword("");
     setConfirmPassword("");
@@ -141,7 +129,7 @@ export default function Signup() {
             <p className="text-grey-50">or</p>
             <Divider />
           </div>
-          <GoogleAuthButton label="Sign up with Google" />
+          <GoogleAuthButton type="Sign up" />
         </div>
       </div>
 

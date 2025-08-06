@@ -30,7 +30,7 @@ export default function Navbar() {
           <Link
             key={link.href}
             href={link.href}
-            className="text-base font-medium px-3 py-1 hover:bg-gray-200 rounded"
+            className="font-medium px-3 py-1 hover:bg-gray-200 rounded"
           >
             {link.label}
             {pathname === link.href && (
@@ -46,7 +46,9 @@ export default function Navbar() {
 
       {/* Authentication links */}
       <div className="flex items-center gap-7">
-        <Link href="/login">Log In</Link>
+        <Link href="/login" className="px-3 py-1 hover:bg-gray-200 rounded">
+          Log In
+        </Link>
         <Link
           href="/signup"
           className="bg-weekly-purple text-white px-7 py-2 rounded-lg"

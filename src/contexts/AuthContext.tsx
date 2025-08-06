@@ -10,6 +10,7 @@ import {
   UserCredential,
   validatePassword,
   sendEmailVerification,
+  signOut,
 } from "firebase/auth";
 
 interface AuthContextType {
@@ -19,6 +20,7 @@ interface AuthContextType {
   validate: (password: string) => Promise<PasswordValidationStatus>;
   verifyEmail: (user: User) => Promise<void>;
   login: (email: string, password: string) => Promise<UserCredential>;
+  signout: () => Promise<void>;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -47,6 +49,10 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     return signInWithEmailAndPassword(auth, email, password);
   }
 
+  function signout() {
+    return signOut(auth);
+  }
+
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged((user) => {
       setCurrentUser(user);
@@ -62,6 +68,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     validate,
     verifyEmail,
     login,
+    signout,
   };
 
   return (
