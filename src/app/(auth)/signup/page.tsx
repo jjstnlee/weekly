@@ -6,7 +6,7 @@ import polaroid from "@/assets/images/Polaroid.png";
 import planet from "@/assets/icons/Planet.svg";
 import Input from "@/components/Input";
 import Link from "next/link";
-import AuthButton from "@/components/AuthButton";
+import PurpleButton from "@/components/PurpleButton";
 import GoogleAuthButton from "@/components/GoogleAuthButton";
 import Divider from "@/components/Divider";
 import { useAuth } from "@/contexts/AuthContext";
@@ -40,7 +40,6 @@ export default function Signup() {
     try {
       setLoading(true);
       await authContextValue?.signup(email, password).then((userCredential) => {
-        authContextValue?.setCurrentUser(userCredential.user);
         authContextValue?.verifyEmail(userCredential.user);
         router.push("/verification");
       });
@@ -122,7 +121,7 @@ export default function Signup() {
                 <AuthErrorMessage message={confirmPasswordError} />
               )}
             </div>
-            <AuthButton label="Sign Up" />
+            <PurpleButton width="w-full" height="h-11" label="Sign Up" />
           </form>
           <div className="flex justify-between items-center">
             <Divider />

@@ -5,9 +5,12 @@ import planet from "@/assets/icons/Planet.svg";
 import Image from "next/image";
 import { motion } from "motion/react";
 import { usePathname } from "next/navigation";
+import { useAuth } from "@/contexts/AuthContext";
 
 export default function Navbar() {
   const pathname = usePathname();
+  const authContextValue = useAuth();
+  const isAuthenticated = authContextValue?.currentUser;
 
   const navLinks = [
     { href: "/", label: "Home" },
@@ -33,7 +36,8 @@ export default function Navbar() {
             className="font-medium px-3 py-1 hover:bg-gray-200 rounded"
           >
             {link.label}
-            {pathname === link.href && (
+            {(pathname === link.href ||
+              (link.label === "Home" && pathname.includes("/dashboard"))) && (
               <motion.div
                 className="h-[3px] bg-weekly-purple rounded"
                 layoutId="underline"
@@ -44,18 +48,29 @@ export default function Navbar() {
         ))}
       </div>
 
-      {/* Authentication links */}
-      <div className="flex items-center gap-7">
-        <Link href="/login" className="px-3 py-1 hover:bg-gray-200 rounded">
-          Log In
+      {isAuthenticated ? (
+        <Link href="/profile" className="ml-30">
+          <Image
+            src="/path/to/profile-pic.jpg"
+            alt="Profile"
+            className="w-10 h-10 rounded-full"
+            width={40}
+            height={40}
+          />
         </Link>
-        <Link
-          href="/signup"
-          className="bg-weekly-purple text-white px-7 py-2 rounded-lg"
-        >
-          Sign Up
-        </Link>
-      </div>
+      ) : (
+        <div className="flex items-center gap-7">
+          <Link href="/login" className="px-3 py-1 hover:bg-gray-200 rounded">
+            Log In
+          </Link>
+          <Link
+            href="/signup"
+            className="bg-weekly-purple text-white px-7 py-2 rounded-lg"
+          >
+            Sign Up
+          </Link>
+        </div>
+      )}
     </nav>
   );
 }

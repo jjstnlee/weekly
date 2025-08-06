@@ -11,7 +11,9 @@
   --color-weekly-purple: #3f3ae0;
   --color-grey-70: #000000b2;
   --color-grey-50: #00000080;
+  --color-grey-40: #00000066;
   --color-grey-30: #0000004d;
+  --color-grey-3: #00000008;
   --color-error-red: #fa0000;
   --font-special: var(--font-ibm-plex-mono);
 }

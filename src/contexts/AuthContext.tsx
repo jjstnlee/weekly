@@ -15,7 +15,6 @@ import {
 
 interface AuthContextType {
   currentUser: User | null;
-  setCurrentUser: (user: User | null) => void;
   signup: (email: string, password: string) => Promise<UserCredential>;
   validate: (password: string) => Promise<PasswordValidationStatus>;
   verifyEmail: (user: User) => Promise<void>;
@@ -63,7 +62,6 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   const authContextValue = {
     currentUser,
-    setCurrentUser,
     signup,
     validate,
     verifyEmail,

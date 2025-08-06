@@ -2,7 +2,7 @@ import Link from "next/link";
 import Image from "next/image";
 import polaroid from "@/assets/images/Polaroid.png";
 import planet from "@/assets/icons/Planet.svg";
-import AuthButton from "@/components/AuthButton";
+import PurpleButton from "@/components/PurpleButton";
 
 export default function Verification() {
   return (
@@ -21,7 +21,7 @@ export default function Verification() {
               Please check your email for the verification link.
             </p>
           </div>
-          <AuthButton label="Log In" />
+          <PurpleButton width="w-full" height="h-11" label="Log In" />
         </div>
       </div>
 

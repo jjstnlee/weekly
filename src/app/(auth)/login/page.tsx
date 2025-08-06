@@ -5,7 +5,7 @@ import Image from "next/image";
 import polaroid from "@/assets/images/Polaroid.png";
 import planet from "@/assets/icons/Planet.svg";
 import Input from "@/components/Input";
-import AuthButton from "@/components/AuthButton";
+import PurpleButton from "@/components/PurpleButton";
 import { useState } from "react";
 import Divider from "@/components/Divider";
 import GoogleAuthButton from "@/components/GoogleAuthButton";
@@ -38,7 +38,6 @@ export default function Login() {
         setLoading(false);
         return;
       }
-      authContextValue?.setCurrentUser(userCredential.user);
       router.push("/");
     } catch (error) {
       if (error instanceof FirebaseError) {
@@ -100,7 +99,7 @@ export default function Login() {
                 <AuthErrorMessage message={wrongPasswordError} />
               )}
             </div>
-            <AuthButton label="Log In" />
+            <PurpleButton width="w-full" height="h-11" label="Log In" />
           </form>
           <div className="flex justify-between items-center">
             <Divider />
