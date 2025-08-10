@@ -1,4 +1,8 @@
+import { motion, useSpring, useTransform } from "motion/react";
 import Image from "next/image";
+
+const cardRotation = 20;
+const cardScale = 1.08;
 
 export default function CircleCard({
   name,
@@ -7,14 +11,73 @@ export default function CircleCard({
   name: string;
   photo: string;
 }) {
+  const xPcnt = useSpring(0, { bounce: 0 });
+  const yPcnt = useSpring(0, { bounce: 0 });
+  const scale = useSpring(1, { bounce: 0 });
+
+  const rotateX = useTransform(
+    yPcnt,
+    [-0.5, 0.5],
+    [-cardRotation, cardRotation],
+  );
+  const rotateY = useTransform(
+    xPcnt,
+    [-0.5, 0.5],
+    [-cardRotation, cardRotation],
+  );
+
+  function getMousePosition(e: React.MouseEvent) {
+    const { width, height, left, top } =
+      e.currentTarget.getBoundingClientRect();
+
+    const currentMouseX = e.clientX - left;
+    const currentMouseY = e.clientY - top;
+
+    return {
+      currentMouseX,
+      currentMouseY,
+      containerWidth: width,
+      containerHeight: height,
+    };
+  }
+
+  function handleMouseMove(e: React.MouseEvent) {
+    const { currentMouseX, currentMouseY, containerWidth, containerHeight } =
+      getMousePosition(e);
+
+    xPcnt.set(currentMouseX / containerWidth - 0.5);
+    yPcnt.set(currentMouseY / containerHeight - 0.5);
+  }
+
+  function handleMouseEnter(e: React.MouseEvent) {
+    scale.set(cardScale);
+  }
+
+  function handleMouseLeave(e: React.MouseEvent) {
+    scale.set(1);
+    xPcnt.set(0);
+    yPcnt.set(0);
+  }
+
   return (
-    <div className="w-57 min-h-68 bg-white rounded-4xl shadow-md flex flex-col justify-center items-center gap-4 cursor-pointer px-10 py-10">
-      <div className="w-37 h-37 rounded-full overflow-hidden relative">
-        <Image src={photo} alt="circle" fill className="object-cover" />
+    <motion.div
+      className="w-52 min-h-68 bg-gradient-to-b from-[#dfdefc] to-[#807de3] rounded shadow-lg flex flex-col justify-between gap-12 cursor-pointer px-4 pt-4 pb-3"
+      onMouseMove={handleMouseMove}
+      onMouseEnter={handleMouseEnter}
+      onMouseLeave={handleMouseLeave}
+      style={{
+        transformStyle: "preserve-3d",
+        rotateX,
+        rotateY,
+        scale,
+      }}
+    >
+      <div className="w-full h-40 overflow-hidden relative">
+        <Image src={photo} alt="circle photo" fill className="object-cover" />
       </div>
-      <h2 className="w-full text-center text-2xl font-normal wrap-anywhere">
+      <h2 className="w-full text-2xl font-semibold wrap-anywhere text-white">
         {name}
       </h2>
-    </div>
+    </motion.div>
   );
 }

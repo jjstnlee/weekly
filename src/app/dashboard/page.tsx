@@ -27,11 +27,11 @@ export default function Dashboard() {
     <div>
       <Navbar />
 
-      <div className="flex flex-col gap-6 px-47 pt-25">
+      <div className="flex flex-col gap-4 px-35 py-20">
         {/* Header */}
         <div className="flex justify-between items-center gap-0.5">
           <div className="flex flex-col gap-0.5">
-            <h1 className="text-4xl font-medium">Circles</h1>
+            <h1 className="text-3xl font-medium">Circles</h1>
             <div className="w-[120%] h-[5px] bg-weekly-purple rounded" />
           </div>
           <Link href="/create-circle">
@@ -46,7 +46,21 @@ export default function Dashboard() {
         </div>
 
         {/* Circle Cards */}
-        <CircleCard name="Lorax" photo={lorax.src} />
+        <div className="flex flex-wrap gap-4">
+          <CircleCard name="Lorax" photo={lorax.src} />
+          <CircleCard name="Lorax" photo={lorax.src} />
+          <CircleCard name="Lorax" photo={lorax.src} />
+          <CircleCard name="Lorax" photo={lorax.src} />
+          <CircleCard name="Lorax" photo={lorax.src} />
+          <CircleCard name="Lorax" photo={lorax.src} />
+          <CircleCard name="Lorax" photo={lorax.src} />
+          <CircleCard name="Lorax" photo={lorax.src} />
+          <CircleCard name="Lorax" photo={lorax.src} />
+          <CircleCard name="Lorax" photo={lorax.src} />
+          <CircleCard name="Lorax" photo={lorax.src} />
+          <CircleCard name="Lorax" photo={lorax.src} />
+          <CircleCard name="Lorax" photo={lorax.src} />
+        </div>
       </div>
     </div>
   );
