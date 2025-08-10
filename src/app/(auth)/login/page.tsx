@@ -13,6 +13,8 @@ import { useAuth } from "@/contexts/AuthContext";
 import { FirebaseError } from "firebase/app";
 import AuthErrorMessage from "@/components/AuthErrorMessage";
 import { useRouter } from "next/navigation";
+import { doc, setDoc, getDoc } from "firebase/firestore";
+import { db } from "@/firebase/config";
 
 export default function Login() {
   const [email, setEmail] = useState("");
@@ -38,6 +40,7 @@ export default function Login() {
         setLoading(false);
         return;
       }
+      addUserToFirestore(userCredential.user.uid);
       router.push("/");
     } catch (error) {
       if (error instanceof FirebaseError) {
@@ -55,6 +58,29 @@ export default function Login() {
     setInvalidEmailError("");
     setWrongPasswordError("");
     setLoading(false);
+  }
+
+  // Add user to firestore if not already added
+  async function addUserToFirestore(userId: string) {
+    try {
+      const userDocRef = doc(db, "users", userId);
+      const userSnap = await getDoc(userDocRef);
+
+      // Return if user already exists
+      if (userSnap.exists()) {
+        return;
+      }
+      await setDoc(userDocRef, {
+        email: email,
+        photoUrl: "",
+        displayName: "",
+        phone: "",
+        onboardingCompleted: false,
+        createdAt: new Date(),
+      });
+    } catch (error) {
+      console.error("Error adding user to Firestore:", error);
+    }
   }
 
   return (

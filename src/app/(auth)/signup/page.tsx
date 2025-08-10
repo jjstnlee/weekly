@@ -26,6 +26,7 @@ export default function Signup() {
 
   const router = useRouter();
 
+  // Handle signup form submission
   async function handleSignup(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     setInvalidEmailError("");
@@ -37,6 +38,7 @@ export default function Signup() {
       return;
     }
 
+    // Add user to Firebase authentication
     try {
       setLoading(true);
       await authContextValue?.signup(email, password).then((userCredential) => {
