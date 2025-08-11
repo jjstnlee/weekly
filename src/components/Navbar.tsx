@@ -37,7 +37,7 @@ export default function Navbar() {
           >
             {link.label}
             {(pathname === link.href ||
-              (link.label === "Home" && pathname.includes("/dashboard"))) && (
+              (link.label === "Home" && !pathname.includes("/about"))) && (
               <motion.div
                 className="h-[3px] bg-weekly-purple rounded"
                 layoutId="underline"

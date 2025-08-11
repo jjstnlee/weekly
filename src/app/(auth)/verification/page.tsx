@@ -8,11 +8,11 @@ export default function Verification() {
   return (
     <div className="w-screen h-screen">
       {/* Left side with logo and signup form */}
-      <div className="w-[55%] absolute h-screen z-10 bg-white rounded-r-4xl px-47 flex items-center">
+      <div className="w-[55%] absolute h-screen z-10 bg-white rounded-r-4xl px-10 flex justify-center items-center">
         <Link href="/">
           <Image src={planet} alt="planet" className="absolute top-5 left-7" />
         </Link>
-        <div className="w-full flex flex-col gap-5">
+        <div className="w-120 flex flex-col gap-5">
           <div>
             <h1 className="text-3xl font-semibold text-weekly-purple">
               Verification

@@ -13,8 +13,7 @@ import { useAuth } from "@/contexts/AuthContext";
 import { FirebaseError } from "firebase/app";
 import AuthErrorMessage from "@/components/AuthErrorMessage";
 import { useRouter } from "next/navigation";
-import { doc, setDoc, getDoc } from "firebase/firestore";
-import { db } from "@/firebase/config";
+import { addUserToFirestore } from "@/firebase/queries";
 
 export default function Login() {
   const [email, setEmail] = useState("");
@@ -40,7 +39,7 @@ export default function Login() {
         setLoading(false);
         return;
       }
-      addUserToFirestore(userCredential.user.uid);
+      addUserToFirestore(userCredential?.user.uid, email);
       router.push("/");
     } catch (error) {
       if (error instanceof FirebaseError) {
@@ -60,37 +59,14 @@ export default function Login() {
     setLoading(false);
   }
 
-  // Add user to firestore if not already added
-  async function addUserToFirestore(userId: string) {
-    try {
-      const userDocRef = doc(db, "users", userId);
-      const userSnap = await getDoc(userDocRef);
-
-      // Return if user already exists
-      if (userSnap.exists()) {
-        return;
-      }
-      await setDoc(userDocRef, {
-        email: email,
-        photoUrl: "",
-        displayName: "",
-        phone: "",
-        onboardingCompleted: false,
-        createdAt: new Date(),
-      });
-    } catch (error) {
-      console.error("Error adding user to Firestore:", error);
-    }
-  }
-
   return (
     <div className="w-screen h-screen">
       {/* Left side with logo and signup form */}
-      <div className="w-[55%] absolute h-screen z-10 bg-white rounded-r-4xl px-47 flex items-center">
+      <div className="w-[55%] absolute h-screen z-10 bg-white rounded-r-4xl flex justify-center items-center px-10">
         <Link href="/">
           <Image src={planet} alt="planet" className="absolute top-5 left-7" />
         </Link>
-        <div className="w-full flex flex-col gap-5">
+        <div className="w-120 flex flex-col gap-5">
           <div>
             <h1 className="text-3xl font-semibold text-weekly-purple">Login</h1>
             <p className="font-light text-grey-50">
