@@ -5,13 +5,15 @@ import PurpleButton from "@/components/PurpleButton";
 import { useAuth } from "@/contexts/AuthContext";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import search from "@/assets/icons/Search.svg";
 import Image from "next/image";
 import CircleCard from "@/components/CircleCard";
-import lorax from "@/assets/images/Lorax.jpg";
+import { fetchCircles } from "@/firebase/queries";
+import { Circle } from "@/types/schema";
 
 export default function Dashboard() {
+  const [circles, setCircles] = useState<Circle[]>([]);
   const authContextValue = useAuth();
   const isAuthenticated = authContextValue?.currentUser;
   const router = useRouter();
@@ -22,6 +24,13 @@ export default function Dashboard() {
       router.push("/login");
     }
   }, [isAuthenticated, router]);
+
+  // Fetch circles
+  useEffect(() => {
+    fetchCircles(authContextValue?.currentUser?.uid ?? "").then((circles) => {
+      setCircles(circles);
+    });
+  }, [authContextValue?.currentUser?.uid]);
 
   return (
     <div>
@@ -47,19 +56,13 @@ export default function Dashboard() {
 
         {/* Circle Cards */}
         <div className="flex flex-wrap gap-4">
-          <CircleCard name="Lorax" photo={lorax.src} />
-          <CircleCard name="Lorax" photo={lorax.src} />
-          <CircleCard name="Lorax" photo={lorax.src} />
-          <CircleCard name="Lorax" photo={lorax.src} />
-          <CircleCard name="Lorax" photo={lorax.src} />
-          <CircleCard name="Lorax" photo={lorax.src} />
-          <CircleCard name="Lorax" photo={lorax.src} />
-          <CircleCard name="Lorax" photo={lorax.src} />
-          <CircleCard name="Lorax" photo={lorax.src} />
-          <CircleCard name="Lorax" photo={lorax.src} />
-          <CircleCard name="Lorax" photo={lorax.src} />
-          <CircleCard name="Lorax" photo={lorax.src} />
-          <CircleCard name="Lorax" photo={lorax.src} />
+          {circles.map((circle) => (
+            <CircleCard
+              key={circle.id}
+              name={circle.name}
+              photo={circle.photoUrl}
+            />
+          ))}
         </div>
       </div>
     </div>

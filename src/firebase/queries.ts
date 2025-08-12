@@ -1,11 +1,16 @@
 import { db } from "@/firebase/config";
+import { Circle } from "@/types/schema";
 import {
   addDoc,
   collection,
   doc,
+  documentId,
   getDoc,
+  getDocs,
+  query,
   setDoc,
   updateDoc,
+  where,
 } from "firebase/firestore";
 
 export async function addUserToFirestore(userId: string, email: string) {
@@ -39,28 +44,51 @@ export async function createCircle(
   // Create new circle
   let circleId = "";
 
+  const userDocRef = doc(db, "users", ownerId);
+  const userSnap = await getDoc(userDocRef);
+
   try {
     await addDoc(collection(db, "circles"), {
+      id: "",
       name: circleName,
       ownerId: ownerId,
       photoUrl: photoUrl,
-      members: [ownerId],
+      members: [
+        {
+          uid: ownerId,
+          name: userSnap.data()?.displayName,
+          photoUrl: userSnap.data()?.photoUrl,
+        },
+      ],
       createdAt: new Date(),
     }).then((docRef) => {
       circleId = docRef.id;
     });
-  } catch (error) {
-    console.log(error);
-  }
 
-  // Add circle to user's circles
-  try {
-    const userDocRef = doc(db, "users", ownerId);
-    const userSnap = await getDoc(userDocRef);
     await updateDoc(userDocRef, {
       circles: [...userSnap.data()?.circles, circleId],
     });
+
+    await updateDoc(doc(db, "circles", circleId), { id: circleId });
   } catch (error) {
-    console.log(error);
+    console.log("Error creating circle: ", error);
   }
+}
+
+export async function fetchCircles(userId: string): Promise<Circle[]> {
+  const userDocRef = doc(db, "users", userId);
+  const userSnap = await getDoc(userDocRef);
+  const circleIds = userSnap.data()?.circles;
+
+  if (circleIds.length === 0) {
+    return [];
+  }
+  const q = query(
+    collection(db, "circles"),
+    where(documentId(), "in", circleIds),
+  );
+
+  const circleSnap = await getDocs(q);
+
+  return circleSnap.docs.map((doc) => doc.data()) as Circle[];
 }
