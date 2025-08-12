@@ -10,7 +10,7 @@ import PurpleButton from "@/components/PurpleButton";
 import GoogleAuthButton from "@/components/GoogleAuthButton";
 import Divider from "@/components/Divider";
 import { useAuth } from "@/contexts/AuthContext";
-import AuthErrorMessage from "@/components/AuthErrorMessage";
+import ErrorMessage from "@/components/ErrorMessage";
 import { useRouter } from "next/navigation";
 import { FirebaseError } from "firebase/app";
 
@@ -96,7 +96,7 @@ export default function Signup() {
                 placeholder="Email"
               />
               {invalidEmailError && (
-                <AuthErrorMessage message={invalidEmailError} />
+                <ErrorMessage message={invalidEmailError} />
               )}
             </div>
             <div className="flex flex-col gap-1">
@@ -108,7 +108,7 @@ export default function Signup() {
                 placeholder="Password"
               />
               {weakPasswordError && (
-                <AuthErrorMessage message={weakPasswordError} />
+                <ErrorMessage message={weakPasswordError} />
               )}
             </div>
             <div className="flex flex-col gap-1">
@@ -120,7 +120,7 @@ export default function Signup() {
                 placeholder="Confirm Password"
               ></Input>
               {confirmPasswordError && (
-                <AuthErrorMessage message={confirmPasswordError} />
+                <ErrorMessage message={confirmPasswordError} />
               )}
             </div>
             <PurpleButton width="w-full" height="h-11" label="Sign Up" />

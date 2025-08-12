@@ -11,7 +11,7 @@ import Divider from "@/components/Divider";
 import GoogleAuthButton from "@/components/GoogleAuthButton";
 import { useAuth } from "@/contexts/AuthContext";
 import { FirebaseError } from "firebase/app";
-import AuthErrorMessage from "@/components/AuthErrorMessage";
+import ErrorMessage from "@/components/ErrorMessage";
 import { useRouter } from "next/navigation";
 import { addUserToFirestore } from "@/firebase/queries";
 
@@ -86,7 +86,7 @@ export default function Login() {
                 placeholder="Email"
               />
               {invalidEmailError && (
-                <AuthErrorMessage message={invalidEmailError} />
+                <ErrorMessage message={invalidEmailError} />
               )}
             </div>
             <div className="flex flex-col gap-1">
@@ -98,7 +98,7 @@ export default function Login() {
                 placeholder="Password"
               />
               {wrongPasswordError && (
-                <AuthErrorMessage message={wrongPasswordError} />
+                <ErrorMessage message={wrongPasswordError} />
               )}
             </div>
             <PurpleButton width="w-full" height="h-11" label="Log In" />

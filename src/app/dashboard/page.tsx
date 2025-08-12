@@ -5,16 +5,20 @@ import PurpleButton from "@/components/PurpleButton";
 import { useAuth } from "@/contexts/AuthContext";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import search from "@/assets/icons/Search.svg";
 import Image from "next/image";
 import CircleCard from "@/components/CircleCard";
 import { fetchCircles } from "@/firebase/queries";
 import { Circle } from "@/types/schema";
+import { useQuery } from "@tanstack/react-query";
 
 export default function Dashboard() {
-  const [circles, setCircles] = useState<Circle[]>([]);
   const authContextValue = useAuth();
+  const { data, isLoading, error } = useQuery<Circle[]>({
+    queryKey: ["dashboard", authContextValue?.currentUser?.uid],
+    queryFn: () => fetchCircles(authContextValue?.currentUser?.uid ?? ""),
+  });
   const isAuthenticated = authContextValue?.currentUser;
   const router = useRouter();
 
@@ -25,12 +29,8 @@ export default function Dashboard() {
     }
   }, [isAuthenticated, router]);
 
-  // Fetch circles
-  useEffect(() => {
-    fetchCircles(authContextValue?.currentUser?.uid ?? "").then((circles) => {
-      setCircles(circles);
-    });
-  }, [authContextValue?.currentUser?.uid]);
+  if (isLoading) return <p>Loading...</p>;
+  if (error) return <p>Error: {error.message}</p>;
 
   return (
     <div>
@@ -56,7 +56,7 @@ export default function Dashboard() {
 
         {/* Circle Cards */}
         <div className="flex flex-wrap gap-4">
-          {circles.map((circle) => (
+          {data?.map((circle) => (
             <CircleCard
               key={circle.id}
               name={circle.name}
