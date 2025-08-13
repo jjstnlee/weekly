@@ -1,5 +1,5 @@
 import { db } from "@/firebase/config";
-import { Circle } from "@/types/schema";
+import { Circle, User } from "@/types/schema";
 import {
   addDoc,
   collection,
@@ -26,13 +26,40 @@ export async function addUserToFirestore(userId: string, email: string) {
       email: email,
       photoUrl: "",
       displayName: "",
-      phone: "",
       onboardingCompleted: false,
       createdAt: new Date(),
       circles: [],
     });
   } catch (error) {
     console.error("Error adding user to Firestore:", error);
+  }
+}
+
+export async function completeUserOnboarding(
+  userId: string,
+  displayName: string,
+  photoUrl: string,
+) {
+  try {
+    const userDocRef = doc(db, "users", userId);
+
+    await updateDoc(userDocRef, {
+      displayName: displayName,
+      photoUrl: photoUrl,
+      onboardingCompleted: true,
+    });
+  } catch (error) {
+    console.error("Error completing onboarding", error);
+  }
+}
+
+export async function fetchUserData(userId: string) {
+  try {
+    const userDocRef = doc(db, "users", userId);
+    const userSnap = await getDoc(userDocRef);
+    return userSnap.data() as User;
+  } catch (error) {
+    console.error("Error fetching user data:", error);
   }
 }
 

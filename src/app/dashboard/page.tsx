@@ -9,25 +9,33 @@ import { useEffect } from "react";
 import search from "@/assets/icons/Search.svg";
 import Image from "next/image";
 import CircleCard from "@/components/CircleCard";
-import { fetchCircles } from "@/firebase/queries";
+import { fetchCircles, fetchUserData } from "@/firebase/queries";
 import { Circle } from "@/types/schema";
 import { useQuery } from "@tanstack/react-query";
 
 export default function Dashboard() {
   const authContextValue = useAuth();
+  const { data: userData } = useQuery({
+    queryKey: [authContextValue?.currentUser?.uid],
+    queryFn: () => fetchUserData(authContextValue?.currentUser?.uid ?? ""),
+  });
   const { data, isLoading, error } = useQuery<Circle[]>({
     queryKey: ["dashboard", authContextValue?.currentUser?.uid],
     queryFn: () => fetchCircles(authContextValue?.currentUser?.uid ?? ""),
   });
   const isAuthenticated = authContextValue?.currentUser;
   const router = useRouter();
+  const onboardingCompleted = userData?.onboardingCompleted;
 
   // Redirect to login if not authenticated
   useEffect(() => {
     if (!isAuthenticated) {
       router.push("/login");
     }
-  }, [isAuthenticated, router]);
+    if (!onboardingCompleted) {
+      router.push("/welcome");
+    }
+  }, [isAuthenticated, onboardingCompleted, router]);
 
   if (isLoading) return <p>Loading...</p>;
   if (error) return <p>Error: {error.message}</p>;
@@ -36,7 +44,7 @@ export default function Dashboard() {
     <div>
       <Navbar />
 
-      <div className="flex flex-col gap-4 px-35 py-20">
+      <div className="flex flex-col gap-4 px-35 py-40">
         {/* Header */}
         <div className="flex justify-between items-center gap-0.5">
           <div className="flex flex-col gap-0.5">
