@@ -18,7 +18,7 @@ export default function Navbar() {
   ];
 
   return (
-    <nav className="w-full h-[4rem] flex justify-between px-10 items-center">
+    <nav className="w-full h-[4rem] flex justify-between px-10 items-center fixed bg-white">
       {/* Logo section */}
       <div className="flex items-center gap-2">
         <Image src={planet} alt="planet" />
