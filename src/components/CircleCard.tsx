@@ -1,19 +1,24 @@
 import { motion, useSpring, useTransform } from "motion/react";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 
 const cardRotation = 20;
 const cardScale = 1.08;
 
 export default function CircleCard({
+  id,
   name,
   photo,
 }: {
+  id: string;
   name: string;
   photo: string;
 }) {
   const xPcnt = useSpring(0, { bounce: 0 });
   const yPcnt = useSpring(0, { bounce: 0 });
   const scale = useSpring(1, { bounce: 0 });
+
+  const router = useRouter();
 
   const rotateX = useTransform(
     yPcnt,
@@ -49,14 +54,18 @@ export default function CircleCard({
     yPcnt.set(currentMouseY / containerHeight - 0.5);
   }
 
-  function handleMouseEnter(e: React.MouseEvent) {
+  function handleMouseEnter() {
     scale.set(cardScale);
   }
 
-  function handleMouseLeave(e: React.MouseEvent) {
+  function handleMouseLeave() {
     scale.set(1);
     xPcnt.set(0);
     yPcnt.set(0);
+  }
+
+  function handleOnClick() {
+    router.push("/dashboard/" + id);
   }
 
   return (
@@ -65,6 +74,7 @@ export default function CircleCard({
       onMouseMove={handleMouseMove}
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
+      onClick={handleOnClick}
       style={{
         transformStyle: "preserve-3d",
         rotateX,

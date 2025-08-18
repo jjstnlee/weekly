@@ -19,7 +19,11 @@ export default function Dashboard() {
     queryKey: [authContextValue?.currentUser?.uid],
     queryFn: () => fetchUserData(authContextValue?.currentUser?.uid ?? ""),
   });
-  const { data, isLoading, error } = useQuery<Circle[]>({
+  const {
+    data: circles,
+    isLoading,
+    error,
+  } = useQuery<Circle[]>({
     queryKey: ["dashboard", authContextValue?.currentUser?.uid],
     queryFn: () => fetchCircles(authContextValue?.currentUser?.uid ?? ""),
   });
@@ -64,9 +68,10 @@ export default function Dashboard() {
 
         {/* Circle Cards */}
         <div className="flex flex-wrap gap-4">
-          {data?.map((circle) => (
+          {circles?.map((circle) => (
             <CircleCard
               key={circle.id}
+              id={circle.id}
               name={circle.name}
               photo={circle.photoUrl}
             />

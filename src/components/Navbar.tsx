@@ -13,7 +13,7 @@ export default function Navbar() {
   const isAuthenticated = authContextValue?.currentUser;
 
   const navLinks = [
-    { href: "/", label: "Home" },
+    { href: isAuthenticated ? "/dashboard" : "/", label: "Home" },
     { href: "/about", label: "About" },
   ];
 

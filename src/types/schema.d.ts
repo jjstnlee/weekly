@@ -11,7 +11,14 @@ export type Circle = {
   id: string;
   name: string;
   photoUrl: string;
-  members: string[];
+  members: CircleMember[];
   ownerId: string;
   createdAt: Date;
+};
+
+export type CircleMember = {
+  uid: string;
+  name: string;
+  photoUrl: string;
+  weeklyVideoUrl: string;
 };

@@ -1,5 +1,5 @@
-import { db } from "@/firebase/config";
-import { Circle, User } from "@/types/schema";
+import { db, storage } from "@/firebase/config";
+import { Circle, CircleMember, User } from "@/types/schema";
 import {
   addDoc,
   collection,
@@ -12,6 +12,7 @@ import {
   updateDoc,
   where,
 } from "firebase/firestore";
+import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 
 export async function addUserToFirestore(userId: string, email: string) {
   try {
@@ -54,6 +55,9 @@ export async function completeUserOnboarding(
 }
 
 export async function fetchUserData(userId: string) {
+  if (!userId) {
+    return;
+  }
   try {
     const userDocRef = doc(db, "users", userId);
     const userSnap = await getDoc(userDocRef);
@@ -85,6 +89,7 @@ export async function createCircle(
           uid: ownerId,
           name: userSnap.data()?.displayName,
           photoUrl: userSnap.data()?.photoUrl,
+          weeklyVideoUrl: "",
         },
       ],
       createdAt: new Date(),
@@ -118,4 +123,44 @@ export async function fetchCircles(userId: string): Promise<Circle[]> {
   const circleSnap = await getDocs(q);
 
   return circleSnap.docs.map((doc) => doc.data()) as Circle[];
+}
+
+export async function fetchCircleData(circleId: string) {
+  try {
+    const circleDocRef = doc(db, "circles", circleId);
+    const circleSnap = await getDoc(circleDocRef);
+    return circleSnap.data() as Circle;
+  } catch (error) {
+    console.error("Error fetching circle data:", error);
+  }
+}
+
+export async function addUserVideo(
+  userId: string,
+  circleId: string,
+  weeklyVideo: File,
+) {
+  try {
+    // Upload video to Firebase Storage
+    const storageRef = ref(storage, `videos/${weeklyVideo.name}-${Date.now()}`);
+    await uploadBytes(storageRef, weeklyVideo);
+
+    // Get video URL from Firebase Storage
+    const weeklyVideoUrl = await getDownloadURL(storageRef);
+
+    // Update user video URL in Firestore
+    const circleDocRef = doc(db, "circles", circleId);
+    const circleSnap = await getDoc(circleDocRef);
+    const members = circleSnap.data()?.members as CircleMember[];
+    const updatedMembers = members.map((member) =>
+      member.uid === userId
+        ? { ...member, weeklyVideoUrl: weeklyVideoUrl }
+        : member,
+    );
+    await updateDoc(circleDocRef, {
+      members: updatedMembers,
+    });
+  } catch (error) {
+    console.error("Error adding user video:", error);
+  }
 }

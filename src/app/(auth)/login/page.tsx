@@ -13,8 +13,7 @@ import { useAuth } from "@/contexts/AuthContext";
 import { FirebaseError } from "firebase/app";
 import ErrorMessage from "@/components/ErrorMessage";
 import { useRouter } from "next/navigation";
-import { addUserToFirestore, fetchUserData } from "@/firebase/queries";
-import { useQuery } from "@tanstack/react-query";
+import { addUserToFirestore } from "@/firebase/queries";
 
 export default function Login() {
   const [email, setEmail] = useState("");
@@ -23,10 +22,6 @@ export default function Login() {
   const [wrongPasswordError, setWrongPasswordError] = useState("");
   const [loading, setLoading] = useState(false);
   const authContextValue = useAuth();
-  const { data } = useQuery({
-    queryKey: [authContextValue?.currentUser?.uid],
-    queryFn: () => fetchUserData(authContextValue?.currentUser?.uid ?? ""),
-  });
 
   const router = useRouter();
 
