@@ -5,6 +5,7 @@ import { useQuery } from "@tanstack/react-query";
 import { use } from "react";
 import VideoInput from "@/components/VideoInput";
 import { useAuth } from "@/contexts/AuthContext";
+import Orbit from "@/components/Orbit";
 
 export default function CirclePage({
   params,
@@ -29,18 +30,8 @@ export default function CirclePage({
     <div>
       <Navbar />
 
-      <div className="flex flex-col gap-4 px-35 py-40">
-        {/* Header */}
-        <div className="flex justify-between items-center gap-0.5">
-          <div className="flex flex-col gap-0.5">
-            <h1 className="text-3xl font-medium">Videos</h1>
-            <div className="w-[120%] h-[5px] bg-weekly-purple rounded" />
-          </div>
-          <VideoInput
-            userId={authContextValue?.currentUser?.uid ?? ""}
-            circleId={circleId}
-          />
-        </div>
+      <div className="flex flex-col justify-center items-center py-30">
+        <Orbit circleData={circleData} />
       </div>
     </div>
   );

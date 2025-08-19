@@ -22,7 +22,7 @@ export default function Navbar() {
       {/* Logo section */}
       <div className="flex items-center gap-2">
         <Image src={planet} alt="planet" />
-        <h1 className="font-ibm-plex-mono text-2xl font-semibold text-weekly-purple">
+        <h1 className="font-mono text-2xl font-semibold text-weekly-purple">
           weekly
         </h1>
       </div>
