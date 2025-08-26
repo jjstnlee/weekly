@@ -15,7 +15,7 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { completeUserOnboarding, fetchUserData } from "@/firebase/queries";
 
 export default function Welcome() {
-  const [photo, setPhoto] = useState("");
+  const [photo, setPhoto] = useState<File>();
   const [name, setName] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
   const authContextValue = useAuth();
@@ -37,7 +37,7 @@ export default function Welcome() {
       queryClient.setQueryData([authContextValue?.currentUser?.uid], newUser);
       router.push("/dashboard");
       setName("");
-      setPhoto("");
+      setPhoto(undefined);
       setErrorMessage("");
     },
   });
@@ -57,12 +57,12 @@ export default function Welcome() {
     e.preventDefault();
 
     if (!name) {
-      setErrorMessage("Circle name is required");
+      setErrorMessage("Name is required");
       return;
     }
 
     if (!photo) {
-      setErrorMessage("Circle photo is required");
+      setErrorMessage("Photo is required");
       return;
     }
 

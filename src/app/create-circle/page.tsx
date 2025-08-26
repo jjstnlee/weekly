@@ -13,7 +13,7 @@ import ErrorMessage from "@/components/ErrorMessage";
 
 export default function CreateCircle() {
   const [circleName, setCircleName] = useState("");
-  const [photo, setPhoto] = useState("");
+  const [photo, setPhoto] = useState<File>();
   const [errorMessage, setErrorMessage] = useState("");
   const authContextValue = useAuth();
   const isAuthenticated = authContextValue?.currentUser;
@@ -29,7 +29,7 @@ export default function CreateCircle() {
       );
       router.push("/dashboard");
       setCircleName("");
-      setPhoto("");
+      setPhoto(undefined);
       setErrorMessage("");
     },
   });

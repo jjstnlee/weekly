@@ -6,14 +6,20 @@ import Image from "next/image";
 import { motion } from "motion/react";
 import { usePathname } from "next/navigation";
 import { useAuth } from "@/contexts/AuthContext";
+import { useQuery } from "@tanstack/react-query";
+import { fetchUserData } from "@/firebase/queries";
 
 export default function Navbar() {
   const pathname = usePathname();
   const authContextValue = useAuth();
   const isAuthenticated = authContextValue?.currentUser;
+  const { data } = useQuery({
+    queryKey: [authContextValue?.currentUser?.uid],
+    queryFn: () => fetchUserData(authContextValue?.currentUser?.uid ?? ""),
+  });
 
   const navLinks = [
-    { href: isAuthenticated ? "/dashboard" : "/", label: "Home" },
+    { href: isAuthenticated && data?.onboardingCompleted ? "/dashboard" : "/", label: "Home" },
     { href: "/about", label: "About" },
   ];
 

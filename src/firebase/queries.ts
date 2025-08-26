@@ -39,9 +39,15 @@ export async function addUserToFirestore(userId: string, email: string) {
 export async function completeUserOnboarding(
   userId: string,
   displayName: string,
-  photoUrl: string,
+  photo: File | undefined,
 ) {
   try {
+    const storageRef = ref(storage, `users/${userId}/${photo?.name}-${Date.now()}`);
+    if (photo) {
+      await uploadBytes(storageRef, photo);
+    }
+    const photoUrl = await getDownloadURL(storageRef);
+
     const userDocRef = doc(db, "users", userId);
 
     await updateDoc(userDocRef, {
@@ -70,7 +76,7 @@ export async function fetchUserData(userId: string) {
 export async function createCircle(
   circleName: string,
   ownerId: string,
-  photoUrl: string,
+  photo: File | undefined,
 ) {
   // Create new circle
   let circleId = "";
@@ -79,6 +85,13 @@ export async function createCircle(
   const userSnap = await getDoc(userDocRef);
 
   try {
+    
+    const storageRef = ref(storage, `users/${ownerId}/circles/${circleName}/${photo?.name}-${Date.now()}`);
+    if (photo) {
+      await uploadBytes(storageRef, photo);
+    }
+    const photoUrl = await getDownloadURL(storageRef);
+
     await addDoc(collection(db, "circles"), {
       id: "",
       name: circleName,
@@ -138,11 +151,12 @@ export async function fetchCircleData(circleId: string) {
 export async function addUserVideo(
   userId: string,
   circleId: string,
+  circleName: string,
   weeklyVideo: File,
 ) {
   try {
     // Upload video to Firebase Storage
-    const storageRef = ref(storage, `videos/${weeklyVideo.name}-${Date.now()}`);
+    const storageRef = ref(storage, `users/${userId}/circles/${circleName}/videos/${weeklyVideo.name}-${Date.now()}`);
     await uploadBytes(storageRef, weeklyVideo);
 
     // Get video URL from Firebase Storage

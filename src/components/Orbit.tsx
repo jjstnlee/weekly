@@ -1,6 +1,5 @@
 import { Circle } from "@/types/schema";
 import { motion } from "motion/react";
-import Image from "next/image";
 
 const ORBIT_RADIUS = 250;
 
@@ -13,7 +12,7 @@ export default function Orbit({
     <div className="relative w-[500px] h-[500px] flex items-center justify-center">
       {/* Central Image */}
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 flex flex-col items-center">
-        <Image
+        <img
           src={circleData?.photoUrl ?? ""}
           alt={circleData?.name ?? ""}
           width={200}
@@ -46,7 +45,7 @@ export default function Orbit({
           const y = ORBIT_RADIUS * Math.sin(rad);
 
           return (
-            <Image
+            <img
               key={member.uid}
               src={member.photoUrl}
               alt={member.name}

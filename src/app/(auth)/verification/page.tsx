@@ -1,10 +1,15 @@
+'use client';
+
 import Link from "next/link";
 import Image from "next/image";
 import polaroid from "@/assets/images/Polaroid.png";
 import planet from "@/assets/icons/Planet.svg";
 import PurpleButton from "@/components/PurpleButton";
+import { useRouter } from "next/navigation";
 
 export default function Verification() {
+  const router = useRouter();
+
   return (
     <div className="w-screen h-screen">
       {/* Left side with logo and signup form */}
@@ -21,7 +26,7 @@ export default function Verification() {
               Please check your email for the verification link.
             </p>
           </div>
-          <PurpleButton width="w-full" height="h-11" label="Log In" />
+          <PurpleButton width="w-full" height="h-11" label="Log In" onClick={() => router.push("/login")}/>
         </div>
       </div>
 
