@@ -1,4 +1,4 @@
-'use client';
+"use client";
 
 import Link from "next/link";
 import Image from "next/image";
@@ -26,7 +26,12 @@ export default function Verification() {
               Please check your email for the verification link.
             </p>
           </div>
-          <PurpleButton width="w-full" height="h-11" label="Log In" onClick={() => router.push("/login")}/>
+          <PurpleButton
+            width="w-full"
+            height="h-11"
+            label="Log In"
+            onClick={() => router.push("/login")}
+          />
         </div>
       </div>
 

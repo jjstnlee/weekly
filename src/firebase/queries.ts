@@ -42,7 +42,10 @@ export async function completeUserOnboarding(
   photo: File | undefined,
 ) {
   try {
-    const storageRef = ref(storage, `users/${userId}/${photo?.name}-${Date.now()}`);
+    const storageRef = ref(
+      storage,
+      `users/${userId}/${photo?.name}-${Date.now()}`,
+    );
     if (photo) {
       await uploadBytes(storageRef, photo);
     }
@@ -85,8 +88,10 @@ export async function createCircle(
   const userSnap = await getDoc(userDocRef);
 
   try {
-    
-    const storageRef = ref(storage, `users/${ownerId}/circles/${circleName}/${photo?.name}-${Date.now()}`);
+    const storageRef = ref(
+      storage,
+      `users/${ownerId}/circles/${circleName}/${photo?.name}-${Date.now()}`,
+    );
     if (photo) {
       await uploadBytes(storageRef, photo);
     }
@@ -156,7 +161,10 @@ export async function addUserVideo(
 ) {
   try {
     // Upload video to Firebase Storage
-    const storageRef = ref(storage, `users/${userId}/circles/${circleName}/videos/${weeklyVideo.name}-${Date.now()}`);
+    const storageRef = ref(
+      storage,
+      `users/${userId}/circles/${circleName}/videos/${weeklyVideo.name}-${Date.now()}`,
+    );
     await uploadBytes(storageRef, weeklyVideo);
 
     // Get video URL from Firebase Storage

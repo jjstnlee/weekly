@@ -82,7 +82,11 @@ export default function CircleCard({
       }}
     >
       <div className="w-full h-40 overflow-hidden relative">
-        <img src={photo} alt="circle photo" className="w-full h-full object-cover" />
+        <img
+          src={photo}
+          alt="circle photo"
+          className="w-full h-full object-cover"
+        />
       </div>
       <h2 className="w-full text-2xl font-semibold wrap-anywhere text-white">
         {name}

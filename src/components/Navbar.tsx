@@ -19,7 +19,10 @@ export default function Navbar() {
   });
 
   const navLinks = [
-    { href: isAuthenticated && data?.onboardingCompleted ? "/dashboard" : "/", label: "Home" },
+    {
+      href: isAuthenticated && data?.onboardingCompleted ? "/dashboard" : "/",
+      label: "Home",
+    },
     { href: "/about", label: "About" },
   ];
 
