@@ -111,6 +111,7 @@ export async function createCircle(
         },
       ],
       createdAt: new Date(),
+      joinCode: `${Math.floor(Math.random() * (999999 - 100000 + 1)) + 100000}`,
     }).then((docRef) => {
       circleId = docRef.id;
     });

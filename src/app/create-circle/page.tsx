@@ -65,7 +65,7 @@ export default function CreateCircle() {
     <div>
       <Navbar />
 
-      <div className="w-screen flex justify-center px-10 py-30">
+      <div className="w-screen flex justify-center px-10 py-50">
         <div className="w-120 flex flex-col items-center gap-5">
           <PhotoInput photo={photo} setPhoto={setPhoto} />
           <form

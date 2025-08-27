@@ -14,6 +14,7 @@ export type Circle = {
   members: CircleMember[];
   ownerId: string;
   createdAt: Date;
+  joinCode: string;
 };
 
 export type CircleMember = {

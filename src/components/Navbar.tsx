@@ -29,12 +29,14 @@ export default function Navbar() {
   return (
     <nav className="w-full h-[4rem] flex justify-between px-10 items-center fixed bg-white">
       {/* Logo section */}
-      <div className="flex items-center gap-2">
-        <Image src={planet} alt="planet" />
-        <h1 className="font-mono text-2xl font-semibold text-weekly-purple">
-          weekly
-        </h1>
-      </div>
+      <Link href={isAuthenticated ? "/dashboard" : "/"}>
+        <div className="flex items-center gap-2">
+          <Image src={planet} alt="planet" />
+          <h1 className="font-mono text-2xl font-semibold text-weekly-purple">
+            weekly
+          </h1>
+        </div>
+      </Link>
 
       {/* Navigation links */}
       <div className="flex items-center gap-16">
@@ -59,10 +61,10 @@ export default function Navbar() {
 
       {isAuthenticated ? (
         <Link href="/profile" className="ml-30">
-          <Image
-            src="/path/to/profile-pic.jpg"
+          <img
+            src={data?.photoUrl}
             alt="Profile"
-            className="w-10 h-10 rounded-full"
+            className="w-10 h-10 rounded-full object-cover"
             width={40}
             height={40}
           />
